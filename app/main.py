@@ -1,8 +1,8 @@
 
-from fastapi import Depends, FastAPI
-
-from configs.Environment import get_environment_variables
-from metadata import Tags
+from fastapi import FastAPI, __version__
+from time import time
+from app.config.Environment import get_environment_variables
+from app.metadata import Tags
 
 # Application Environment Configuration
 env = get_environment_variables()
@@ -14,3 +14,7 @@ app = FastAPI(
     openapi_tags=Tags,
 )
 
+
+@app.get('/ping')
+async def hello():
+    return {'res': 'pong', 'version': __version__, "time": time()}
