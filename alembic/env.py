@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from app.models import ProductModel
-from app.configs.Environment import get_environment_variables
+from app.config.Environment import get_environment_variables
 settings = get_environment_variables()
 
 # this is the Alembic Config object, which provides
