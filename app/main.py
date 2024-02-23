@@ -3,6 +3,7 @@ from fastapi import FastAPI, __version__
 from time import time
 from app.config.Environment import get_environment_variables
 from app.metadata import Tags
+from app.routers.v1.ProductRouter import product_router
 
 # Application Environment Configuration
 env = get_environment_variables()
@@ -18,3 +19,5 @@ app = FastAPI(
 @app.get('/ping')
 async def hello():
     return {'res': 'pong', 'version': __version__, "time": time()}
+
+app.include_router(product_router)

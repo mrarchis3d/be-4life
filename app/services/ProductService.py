@@ -3,32 +3,35 @@ from typing import List, Optional
 from fastapi import Depends
 from app.models.ProductModel import Product
 
-from app.repositories import ProductRepository
-from app.schemas import ProductSchema
+from app.repositories.ProductRepository import ProductRepository
+from app.schemas.ProductSchema import ProductBase, ProductCreated
 
 
 
 class ProductService:
-    authorRepository: ProductRepository
+    productRepository: ProductRepository
 
     def __init__(
-        self, authorRepository: ProductRepository = Depends()
+        self, productRepository: ProductRepository = Depends()
     ) -> None:
-        self.authorRepository = authorRepository
+        self.productRepository = productRepository
 
-    def create(self, author_body: ProductSchema) -> Product:
-        return self.authorRepository.create(
-            Product(name=author_body.name)
+    def create(self, product_body: ProductBase) -> Product:
+        return self.productRepository.create(
+            Product(
+                    name=product_body.name,
+                    shortDescription=product_body.shortDescription
+                )
         )
 
-    def delete(self, author_id: int) -> None:
-        return self.authorRepository.delete(
-            Product(id=author_id)
+    def delete(self, product_id: int) -> None:
+        return self.productRepository.delete(
+            Product(id=product_id)
         )
 
-    def get(self, author_id: int) -> Product:
-        return self.authorRepository.get(
-            Product(id=author_id)
+    def get(self, product_id: int) -> Product:
+        return self.productRepository.get(
+            Product(id=product_id)
         )
 
     def list(
@@ -37,18 +40,18 @@ class ProductService:
         pageSize: Optional[int] = 100,
         startIndex: Optional[int] = 0,
     ) -> List[Product]:
-        return self.authorRepository.list(
+        return self.productRepository.list(
             name, pageSize, startIndex
         )
 
     def update(
-        self, author_id: int, author_body: ProductSchema
+        self, product_id: int, product_body: ProductCreated
     ) -> Product:
-        return self.authorRepository.update(
-            author_id, Product(name=author_body.name)
+        return self.productRepository.update(
+            product_id, Product(name=product_body.name)
         )
 
-    def get_products(self, author_id: int) -> List[Product]:
-        return self.authorRepository.get(
-            Product(id=author_id)
+    def get_products(self, product_id: int) -> List[Product]:
+        return self.productRepository.get(
+            Product(id=product_id)
         ).products
